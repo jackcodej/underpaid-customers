@@ -1,62 +1,45 @@
 melon_cost = 1.00
 
-customer1_name = "Joe"
-customer1_melons = 5
-customer1_paid = 5.00
+file = "customer-orders.txt"
 
-customer2_name = "Frank"
-customer2_melons = 6
-customer2_paid = 6.00
+def checkCustomerPayment(file):
+    """
+    Takes in customer orders and returns payment and calculated payment
+    """
+    #Initiate total debt value to track amount owed by all customers
+    total_debt = 0
+    #Open file to loop through
+    current_file = open(file)
+    #Process each line in list of customer orders
+    for each_customer in current_file:
+        #Default to customer does not owe money
+        owe_money = "does not owe money"
+        #Split the line by '|'
+        words = each_customer.split('|')
+        #Set customer id to first 'word'
+        customer_id = words[0]
+        #Set customer name to second 'word'
+        customer_name = words[1]
+        #Set melon count to third 'word'
+        melon_count = int(words[2])
+        #Set customer payment to fourth 'word'
+        customer_payment = float(words[3])
 
-customer3_name = "Sally"
-customer3_melons = 3
-customer3_paid = 3.00
+        #Calculated expected payment
+        expected_payment = melon_count * melon_cost
+        #Check if customer payment is less than expected payment
+        if customer_payment < expected_payment:
+            #Calculate customer debt (rounding to 2 decimal places)
+            customer_debt = round((expected_payment - customer_payment),2)
+            total_debt = round((total_debt + customer_debt),2)
+            #Change owe money string to reflect debt
+            owe_money = f"owes the company ${customer_debt}"
+        #Print all values per customer
+        print(f"Customer ID {customer_id}: {customer_name} purchased {melon_count} for {customer_payment} expected payment was {expected_payment} and {owe_money}")
+    #If debt exists, print total amount at the end of the function
+    if total_debt > 0:
+        print(f"Total debt of customers to melon company is: ${total_debt}")
+    #Close file after done processing
+    current_file.close()
 
-customer4_name = "Sean"
-customer4_melons = 9
-customer4_paid = 9.50
-
-customer5_name = "David"
-customer5_melons = 4
-customer5_paid = 4.00
-
-customer6_name = "Ashley"
-customer6_melons = 3
-customer6_paid = 2.00
-
-
-customer1_expected = customer1_melons * melon_cost
-if customer1_expected != customer1_paid:
-    print(f"{customer1_name} paid ${customer1_paid:.2f},",
-          f"expected ${customer1_expected:.2f}"
-          )
-
-customer2_expected = customer2_melons * melon_cost
-if customer2_expected != customer2_paid:
-    print(f"{customer2_name} paid ${customer2_paid:.2f},",
-          f"expected ${customer2_expected:.2f}"
-          )
-
-customer3_expected = customer3_melons * melon_cost
-if customer3_expected != customer3_paid:
-    print(f"{customer3_name} paid ${customer3_paid:.2f},",
-          f"expected ${customer3_expected:.2f}"
-          )
-
-customer4_expected = customer4_melons * melon_cost
-if customer4_expected != customer4_paid:
-    print(f"{customer4_name} paid ${customer4_paid:.2f},",
-          f"expected ${customer4_expected:.2f}"
-          )
-
-customer5_expected = customer5_melons * melon_cost
-if customer5_expected != customer5_paid:
-    print(f"{customer5_name} paid ${customer5_paid:.2f},",
-          f"expected ${customer5_expected:.2f}"
-          )
-
-customer6_expected = customer6_melons * melon_cost
-if customer6_expected != customer6_paid:
-    print(f"{customer6_name} paid ${customer6_paid:.2f},",
-          f"expected ${customer6_expected:.2f}"
-          )
+checkCustomerPayment(file)
